@@ -1,9 +1,9 @@
-# 赛博女友
+# 赛博恋人
 
 > 一个能**实时语音对话**的 AI 数字人网页应用。你说话，她看着你，用嘴型和动作回答，中途可以随时打断。
 > 形象、人设、声音都能换成你自己的 —— 换一张照片、改一段文字就行。
 
-**在线体验**：[cyber-girlfriend-019x.onrender.com](https://cyber-girlfriend-019x.onrender.com)
+**在线体验**：[cyber-lover.onrender.com](https://cyber-lover.onrender.com)
 （需要自备一个 Vivix API Key，申请方法见下面，免费可拿）
 
 <img src="docs/screenshot.jpg" width="320" alt="主界面"> <img src="docs/screenshot-settings.jpg" width="320" alt="设置面板">
@@ -141,7 +141,7 @@ DEPLOY.md           公网部署教程
 ```bash
 npm install
 npm run dev          # 打包前端 + 启动服务，改 src/main.js 后重跑
-npm run build:exe    # 打包成免装 Node 的单文件 dist/赛博女友.exe
+npm run build:exe    # 打包成免装 Node 的单文件 dist/赛博恋人.exe
 npm run build:all    # 上面那个 + 安装包
 ```
 

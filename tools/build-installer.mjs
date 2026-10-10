@@ -1,4 +1,4 @@
-// 把 dist/赛博女友.exe 打成一个「双击就能装」的安装包 exe
+// 把 dist/赛博恋人.exe 打成一个「双击就能装」的安装包 exe
 // 用法：npm run build:installer   （先跑 npm run build:exe 生成主程序）
 //
 // 用 Windows 自带的 IExpress（iexpress.exe，系统组件，无需额外安装）做自解压包：
@@ -23,7 +23,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const DIST = path.join(ROOT, "dist");
 const OUTDIR = path.join(DIST, "安装包");
-const SRC_EXE = path.join(DIST, "赛博女友.exe");
+const SRC_EXE = path.join(DIST, "赛博恋人.exe");
 
 const STAGE = path.join(os.tmpdir(), "cg-installer-build");   // 纯 ASCII，给 IExpress 用
 const PAYLOAD = path.join(STAGE, "payload");
@@ -36,7 +36,7 @@ const today = (() => {
   const p = (n) => String(n).padStart(2, "0");
   return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}`;   // 本地日期，不用 UTC
 })();
-const SETUP_NAME = `赛博女友_安装包_${today}.exe`;
+const SETUP_NAME = `赛博恋人_安装包_${today}.exe`;
 const SETUP_OUT = path.join(OUTDIR, SETUP_NAME);
 
 const IEXPRESS = path.join(process.env.SystemRoot || "C:\\Windows", "System32", "iexpress.exe");
@@ -93,7 +93,7 @@ async function main() {
     "DisplayLicense=",
     "FinishMessage=",
     `TargetName=${SETUP_TMP}`,
-    "FriendlyName=CyberGirlfriend Setup",
+    "FriendlyName=CyberLover Setup",
     "AppLaunched=install.cmd",
     "PostInstallCmd=<None>",
     "AdminQuietInstCmd=",

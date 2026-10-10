@@ -1,10 +1,10 @@
-// 赛博女友 · 本地服务端
+// 赛博恋人 · 本地服务端
 // 职责：托管网页 + 代理 Vivix API（API Key 只留在本机，不下发到浏览器）+ 角色库 + 局域网访问
 // 文档：https://docs.vivix.ai/streaming-avatar/get-started/quickstart
 import http from "node:http";
 import https from "node:https";
 import { readFile, writeFile, mkdir, rm, readdir, stat } from "node:fs/promises";
-import { existsSync } from "node:fs";
+import { existsSync, renameSync } from "node:fs";
 import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
 import { randomUUID } from "node:crypto";
@@ -39,12 +39,32 @@ const IS_PUBLIC = /^(1|true|yes|on)$/i.test(process.env.CG_PUBLIC || "");
 
 // 可写数据目录：
 //   · 源码模式 → 就是项目目录（保持原样，现有 config.json / 角色 / 图片都不用搬）
-//   · 独立 exe → %LOCALAPPDATA%\赛博女友（放 Program Files 里也能写，不需要管理员权限）
+//   · 独立 exe → %LOCALAPPDATA%\赛博恋人（放 Program Files 里也能写，不需要管理员权限）
 //   · 公网部署 → 指向平台挂载的持久磁盘（不挂的话是临时目录，重启会清）
+const DATA_DIR_NAME = "赛博恋人";
+
+// 改名前（叫「赛博女友」的时候）独立版的数据藏在旧目录里 —— 用户的 Key、角色库都在那儿。
+// 升级上来的老用户如果直接换目录读，会以为什么都没了（这个坑踩过一次，别再踩）。
+// 所以启动时先试着整体改名过来：同一个盘内改名是原子的，成功即搬完；
+// 失败（被杀软 / 占用拦住）就让旧目录继续顶上，**绝不删数据、绝不两边同时用**。
+function resolveSeaDataDir() {
+  const legacy = path.join(process.env.LOCALAPPDATA || os.homedir(), "赛博女友");
+  const target = path.join(process.env.LOCALAPPDATA || os.homedir(), DATA_DIR_NAME);
+  if (existsSync(target) || !existsSync(legacy)) return target;
+  try {
+    renameSync(legacy, target);
+    console.log("  已把旧数据目录迁移到：" + target);
+  } catch {
+    console.warn("  旧数据目录迁移失败，继续沿用：" + legacy);
+    return legacy;
+  }
+  return existsSync(target) ? target : legacy;
+}
+
 const DATA_ROOT = process.env.CG_DATA_DIR
   ? path.resolve(process.env.CG_DATA_DIR)
   : IS_SEA
-    ? path.join(process.env.LOCALAPPDATA || os.homedir(), "赛博女友")
+    ? resolveSeaDataDir()
     : ROOT;
 
 // 公网模式下每个浏览器一个独立小仓库，放这下面
@@ -386,7 +406,7 @@ function httpError(status, message, code) {
 }
 
 // ---------------- 角色图片发布（传到用户的 GitHub，生成公网 raw 链接） ----------------
-const GH_REPO = "cyber-girlfriend-assets";
+const GH_REPO = "cyber-lover-assets";
 
 async function ghRun(args, timeout = 60000) {
   const { stdout } = await execFileP("gh", args, {
@@ -416,7 +436,7 @@ async function ghTarget() {
   try {
     await ghRun(["repo", "view", slug], 30000);
   } catch {
-    await ghRun(["repo", "create", GH_REPO, "--public", "--description", "赛博女友 · 角色素材"], 90000);
+    await ghRun(["repo", "create", GH_REPO, "--public", "--description", "赛博恋人 · 角色素材"], 90000);
   }
   let branch = "main";
   try {
@@ -464,7 +484,7 @@ function ghHeaders(token) {
   return {
     Authorization: `Bearer ${token}`,
     Accept: "application/vnd.github+json",
-    "User-Agent": "cyber-girlfriend",
+    "User-Agent": "cyber-lover",
     "X-GitHub-Api-Version": "2022-11-28"
   };
 }
@@ -483,7 +503,7 @@ async function ghRestTarget(token) {
     const createRes = await fetch("https://api.github.com/user/repos", {
       method: "POST",
       headers: { ...ghHeaders(token), "Content-Type": "application/json" },
-      body: JSON.stringify({ name: slug.split("/")[1], description: "赛博女友 · 角色素材", private: false })
+      body: JSON.stringify({ name: slug.split("/")[1], description: "赛博恋人 · 角色素材", private: false })
     });
     if (!createRes.ok) {
       throw httpError(400, `自动创建仓库 ${slug} 失败（HTTP ${createRes.status}）：请手动建一个公开仓库，或用 GITHUB_REPO 指定已存在的仓库`);
@@ -675,7 +695,7 @@ async function ensureCert(ips) {
       { type: 7, ip: "127.0.0.1" },
       ...ips.map((ip) => ({ type: 7, ip }))
     ];
-    const pems = await selfsigned.generate([{ name: "commonName", value: "cyber-girlfriend.local" }], {
+    const pems = await selfsigned.generate([{ name: "commonName", value: "cyber-lover.local" }], {
       days: 3650,
       keySize: 2048,
       algorithm: "sha256",
@@ -915,7 +935,7 @@ async function handleInner(req, res, secure) {
       const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
       res.writeHead(200, {
         "Content-Type": "application/json; charset=utf-8",
-        "Content-Disposition": `attachment; filename="cyber-girlfriend-characters-${stamp}.json"`,
+        "Content-Disposition": `attachment; filename="cyber-lover-characters-${stamp}.json"`,
         "Cache-Control": "no-store"
       });
       return res.end(JSON.stringify(lib, null, 2));
@@ -1286,7 +1306,7 @@ async function main() {
   server.listen(PORT, HOST, () => {
     console.log("");
     if (IS_PUBLIC) {
-      console.log(`  赛博女友 已启动（公网模式 v${APP_VERSION}）`);
+      console.log(`  赛博恋人 已启动（公网模式 v${APP_VERSION}）`);
       console.log("  · 监听：   " + HOST + ":" + PORT);
       console.log("  · API Key：由每位使用者自带（浏览器本地保存，服务端不落盘）");
       console.log("  · 数据目录：" + DATA_ROOT);
@@ -1295,7 +1315,7 @@ async function main() {
       console.log("");
       return;
     }
-    console.log("  赛博女友 已启动" + (IS_SEA ? "（独立版）" : ""));
+    console.log("  赛博恋人 已启动" + (IS_SEA ? "（独立版）" : ""));
     console.log("  · 本机：  http://localhost:" + PORT);
     if (HOST === "0.0.0.0") {
       if (!ips.length) console.log("  · 局域网：没检测到局域网 IPv4（检查一下网卡/Wi-Fi）");

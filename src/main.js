@@ -1,4 +1,4 @@
-// 赛博女友 · 前端逻辑
+// 赛博恋人 · 前端逻辑
 // 接入：Vivix vivix-a1-stream（REST 创建会话 + WSS 控制通道 + TRTC 实时音视频）
 import TRTC from "trtc-sdk-v5";
 import qrcode from "qrcode-generator";

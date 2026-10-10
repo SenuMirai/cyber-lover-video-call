@@ -1,4 +1,4 @@
-// 把「赛博女友」打包成一个免装 Node 的独立 exe（Node SEA 单文件应用）
+// 把「赛博恋人」打包成一个免装 Node 的独立 exe（Node SEA 单文件应用）
 // 用法：npm run build:exe
 //
 // 做三件事：
@@ -15,7 +15,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const BUILD = path.join(ROOT, "build");
 const DIST = path.join(ROOT, "dist");
-const EXE_NAME = "赛博女友.exe";
+const EXE_NAME = "赛博恋人.exe";
 
 // 内嵌进 exe 的只读文件（打包后 exe 就不依赖这些外部文件了）
 // assets/1791525005312.jpg 是内置默认角色「大肥鱼」的形象图，也是首屏占位图，

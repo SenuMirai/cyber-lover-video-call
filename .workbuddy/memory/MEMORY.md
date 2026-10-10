@@ -1,10 +1,10 @@
-# 赛博女友 · 项目长期记忆
+# 赛博恋人 · 项目长期记忆
 
 ## 这是什么
 基于 Vivix `vivix-a1-stream` 的实时数字人聊天应用。**一套程序两种模式**：
 本机自用（默认）／公网部署（`CG_PUBLIC=1`，给所有人用、使用者自带 Key）。
 后端 `server.mjs`（HTTP 服务 + Vivix API 代理 + 图床上传），前端 `src/main.js` → esbuild → `public/app.js`。
-- 本机模式：形象图走 `gh` CLI 传到 `SenuMirai/cyber-girlfriend-assets` 换 raw 链接；API Key 存 `config.json`（已 gitignore）。
+- 本机模式：形象图走 `gh` CLI 传到 `SenuMirai/cyber-lover-assets` 换 raw 链接；API Key 存 `config.json`（已 gitignore）。
 - 公网模式：形象图落到本服务 `assets/uploads/` 生成自身公网直链；Key 由使用者自带，服务端不落盘。
 
 ## 目录速查
@@ -12,14 +12,14 @@
 `tools/` 打包脚本 · `installer/` 安装包模板 · `deploy 文件`：`Dockerfile`/`.dockerignore`/`render.yaml`/`.env.example`/`DEPLOY.md`。
 
 ## 构建链路（三条命令）
-- `npm run build:exe` → `tools/build-exe.mjs` → `dist/赛博女友.exe`（Node SEA 单文件，86 MB，免装 Node）
-- `npm run build:installer` → `tools/build-installer.mjs` → `dist/安装包/赛博女友_安装包_<日期>.exe`（IExpress 自解压，25 MB）
+- `npm run build:exe` → `tools/build-exe.mjs` → `dist/赛博恋人.exe`（Node SEA 单文件，86 MB，免装 Node）
+- `npm run build:installer` → `tools/build-installer.mjs` → `dist/安装包/赛博恋人_安装包_<日期>.exe`（IExpress 自解压，25 MB）
 - `npm run build:all` 一步到位
 - 模板在 `installer/`：`install.cmd` 必须 **GBK + CRLF**，`readme.txt` 必须 **UTF-8 BOM**；脚本按字节复制，勿用字符串重写。
 
 ## 交付形态历程
 - v1（tag `v1-lan-2026-10-09`）：源码版 + 局域网访问（0.0.0.0 + 自签 HTTPS 3443 + 二维码）。
-- 备份：`backups/20261009_改造前/`、`backups/20261009_v1_局域网版/`、`backups/赛博女友_v1_局域网版_源码_20261009.zip`。
+- 备份：`backups/20261009_改造前/`、`backups/20261009_v1_局域网版/`、`backups/赛博恋人_v1_局域网版_源码_20261009.zip`。
 
 ## 已实现的四项能力（用户提的需求，均已实测）
 1. 角色列表 `characters.json` + `/characters` CRUD（保存/载入/改名/删除/导出/导入）
@@ -36,7 +36,7 @@
 - 形象图必须同时加进 `tools/build-exe.mjs` 的 EMBED 列表（GitHub raw 国内打不开，不内嵌就没头像）。
 - 角色库有**一次性自愈**（version 1→2，只在旧库上跑）：清掉旧占位角色「阿甜」、补入大肥鱼，
   **绝不误删用户自建角色**；跑过一次就不再干预，避免"删了又长回来"。
-- ⚠️ 教训：内置默认值**绝不能依赖本机 config.json** —— exe 数据目录是 `%LOCALAPPDATA%\赛博女友`，
+- ⚠️ 教训：内置默认值**绝不能依赖本机 config.json** —— exe 数据目录是 `%LOCALAPPDATA%\赛博恋人`，
   不继承项目配置。当初 DEFAULTS 写的是占位角色「阿甜」且运镜为空 → 用户以为"大肥鱼丢了、字段全空"。
   **改默认值要同时改 DEFAULTS 和内置角色库。**
 
@@ -106,11 +106,11 @@
 **推荐平台 Render**（免费 + 蓝图一键）；Fly.io 不睡觉但要命令行；Railway 免费额度小。
 
 ### ✅ 线上实例（2026-10-09 部署，2026-10-10 迁至新库）
-- **网址：https://cyber-girlfriend-019x.onrender.com**
+- **网址：https://cyber-lover.onrender.com**
 - GitHub 仓库：https://github.com/SenuMirai/cyber-lover-video-call （公开，分支 `main`，2026-10-10 启用）
-  - 旧库 `SenuMirai/cyber-girlfriend` 历史里留过一张用户照片，已由用户于 2026-10-10 手动删除。
+  - 旧库 `SenuMirai/cyber-lover` 历史里留过一张用户照片，已由用户于 2026-10-10 手动删除。
     新库用「逐字节复现提交」推的干净历史（blob/tree/commit SHA 与本地完全一致）。
-  - 图片托管仓库 `SenuMirai/cyber-girlfriend-assets` **不动**（只存形象图，无隐私）。
+  - 图片托管仓库 `SenuMirai/cyber-lover-assets` **不动**（只存形象图，无隐私）。
 - Render：服务 ID `srv-db4ekdlg1s2s7396f2cg`，workspace `tea-db4ed360tbcc73e3p6l0`，
   docker / free / **singapore** / healthCheck `/health` / autoDeploy `commit`
 - 环境变量：`CG_PUBLIC=1`、`CG_DATA_DIR=/data`、`CG_CLIENT_TTL_DAYS=30`

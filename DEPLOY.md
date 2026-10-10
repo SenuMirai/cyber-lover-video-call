@@ -1,4 +1,4 @@
-# 赛博女友 · 公网部署说明
+# 赛博恋人 · 公网部署说明
 
 把这份程序挂到免费托管平台上，得到一个网址，**任何人都能打开用**。
 不用租服务器，不用买域名。
@@ -26,7 +26,7 @@
 托管平台都是「读你的 GitHub 仓库」来部署的，所以代码得先上去。
 
 ```bash
-cd "赛博女友项目目录"
+cd "赛博恋人项目目录"
 git add -A
 git commit -m "公网版：自带 Key、按浏览器隔离数据"
 git push
@@ -57,7 +57,7 @@ Render 有免费档，用 Dockerfile 一把部署，还支持「蓝图」——�
 ### 3. 选仓库
 回到 Render，在列表里点选那个仓库 → `Connect`。
 
-Render 读到仓库里的 `render.yaml`，会显示一个叫 `cyber-girlfriend` 的服务，
+Render 读到仓库里的 `render.yaml`，会显示一个叫 `cyber-lover` 的服务，
 直接点 `Apply`（或 `Create`）。
 
 ### 4. 等
@@ -68,10 +68,10 @@ Render 读到仓库里的 `render.yaml`，会显示一个叫 `cyber-girlfriend` 
 服务状态变成绿色的 `Live` 后，页面上会显示网址，形如：
 
 ```
-https://cyber-girlfriend-xxxx.onrender.com
+https://cyber-lover-xxxx.onrender.com
 ```
 
-点开就是你的赛博女友，发给朋友他就能用。
+点开就是你的赛博恋人，发给朋友他就能用。
 
 > 网址太长不好记，可以在 Render 的 `Settings` → `Custom Domain` 里绑自己的域名，
 > 但那是可选的，不影响使用。
@@ -116,7 +116,7 @@ flyctl launch
 
 它会问几个问题，照这样答：
 
-- `App name`：随便起，比如 `my-cyber-girlfriend`（要全球唯一）
+- `App name`：随便起，比如 `my-cyber-lover`（要全球唯一）
 - `Region`：选离你近的，国内用户选 `hongkong`（中国香港）延迟最低
 - `Would you like to set up a Postgresql database?` → **No**
 - `Would you like to deploy now?` → **No**（先把环境变量配好再部署）
@@ -153,7 +153,7 @@ flyctl volumes create cg_data --size 1 --region hongkong
 flyctl deploy
 ```
 
-完了它会打印网址，形如 `https://my-cyber-girlfriend.fly.dev`。
+完了它会打印网址，形如 `https://my-cyber-lover.fly.dev`。
 
 ### 6. 以后改代码
 `flyctl deploy` 一条命令重新部署。看日志 `flyctl logs`。
