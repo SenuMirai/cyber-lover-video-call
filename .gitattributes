@@ -1,0 +1,9 @@
+# 按字节原样交付的文件 —— 禁止 git 做行尾（CRLF↔LF）转换。
+#
+# 起因：仓库里 core.autocrlf 是 true，未声明时 git 会把 .cmd 的 CRLF 规范成 LF 存进 blob。
+# 别人 clone 或下 ZIP 后拿到的是 LF 版本，重建安装包时 IExpress / cmd.exe 可能出问题，
+# 而 .cmd 模板里还写着 GBK 中文，行尾一乱就更难查。
+#
+# -text 表示「不转换」：工作区是什么字节，blob 就是什么字节。
+*.cmd               -text
+installer/readme.txt -text
