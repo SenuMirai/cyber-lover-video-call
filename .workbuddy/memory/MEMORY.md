@@ -105,9 +105,12 @@
 `render.yaml`（plan:free）、`.env.example`、**`DEPLOY.md`**（Render/Fly/Railway 点击级教程 + FAQ）。
 **推荐平台 Render**（免费 + 蓝图一键）；Fly.io 不睡觉但要命令行；Railway 免费额度小。
 
-### ✅ 线上实例（2026-10-09 已部署并实测通过）
+### ✅ 线上实例（2026-10-09 部署，2026-10-10 迁至新库）
 - **网址：https://cyber-girlfriend-019x.onrender.com**
-- GitHub 仓库：https://github.com/SenuMirai/cyber-girlfriend （公开，分支 `main`）
+- GitHub 仓库：https://github.com/SenuMirai/cyber-lover-video-call （公开，分支 `main`，2026-10-10 启用）
+  - 旧库 `SenuMirai/cyber-girlfriend` 历史里留过一张用户照片，已由用户于 2026-10-10 手动删除。
+    新库用「逐字节复现提交」推的干净历史（blob/tree/commit SHA 与本地完全一致）。
+  - 图片托管仓库 `SenuMirai/cyber-girlfriend-assets` **不动**（只存形象图，无隐私）。
 - Render：服务 ID `srv-db4ekdlg1s2s7396f2cg`，workspace `tea-db4ed360tbcc73e3p6l0`，
   docker / free / **singapore** / healthCheck `/health` / autoDeploy `commit`
 - 环境变量：`CG_PUBLIC=1`、`CG_DATA_DIR=/data`、`CG_CLIENT_TTL_DAYS=30`
