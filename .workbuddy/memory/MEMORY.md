@@ -17,6 +17,20 @@
 - `npm run build:all` 一步到位
 - 模板在 `installer/`：`install.cmd` 必须 **GBK + CRLF**，`readme.txt` 必须 **UTF-8 BOM**；脚本按字节复制，勿用字符串重写。
 
+## 品牌名 = 「赛博恋人」（2026-10-10 由「赛博女友」改名）
+- **中文**：赛博恋人　**英文标识**：`cyber-lover`（包名 / Render 服务 / User-Agent / 自签证书 CN / 导出文件名尾缀）
+  ／`CyberLover`（安装目录 `%LOCALAPPDATA%\Programs\CyberLover`）／`赛博恋人.exe`、`赛博恋人_安装包_<日期>.exe`
+- 独立版数据目录：`%LOCALAPPDATA%\赛博恋人`。`server.mjs` 的 `resolveSeaDataDir()` 会在首次启动时
+  把旧的 `%LOCALAPPDATA%\赛博女友` **整体改名**过来（同名盘内改名是原子的）；失败就继续沿用旧目录，
+  **绝不删数据、绝不两边同时用**。这就是「改名不能让用户以为 Key 丢了」的保证。
+- `installer/install.cmd` 有一小段升级清理：删掉老程序目录与老快捷方式，避免两个图标并存。
+- ⚠️ 旧名仍会**合法地**出现在两处，别当成残留去清：
+  ① `server.mjs` 里 `resolveSeaDataDir()` 的旧目录名字面量；
+  ② `.workbuddy/memory/2026-10-*.md` 历史日志（追加型档案，不追溯改写）。
+- ⚠️ `.gitattributes` 已把 `*.cmd` 与 `installer/readme.txt` 标为 `-text`。本机 `core.autocrlf=true`，
+  不声明的话 git 会把它们的 CRLF 规范成 LF 存进 blob，别人 clone 后重建安装包就踩 IExpress 的坑。
+  **改这几个文件后要 `git add --renormalize`**（普通 `git add` 不会重新规范化已在索引里的内容）。
+
 ## 交付形态历程
 - v1（tag `v1-lan-2026-10-09`）：源码版 + 局域网访问（0.0.0.0 + 自签 HTTPS 3443 + 二维码）。
 - 备份：`backups/20261009_改造前/`、`backups/20261009_v1_局域网版/`、`backups/赛博恋人_v1_局域网版_源码_20261009.zip`。
@@ -105,14 +119,17 @@
 `render.yaml`（plan:free）、`.env.example`、**`DEPLOY.md`**（Render/Fly/Railway 点击级教程 + FAQ）。
 **推荐平台 Render**（免费 + 蓝图一键）；Fly.io 不睡觉但要命令行；Railway 免费额度小。
 
-### ✅ 线上实例（2026-10-09 部署，2026-10-10 迁至新库）
-- **网址：https://cyber-lover.onrender.com**
+### ✅ 线上实例（2026-10-09 部署，2026-10-10 换库 + 换网址）
+- **网址：https://cyber-lover.onrender.com**（2026-10-10 起；旧网址 `cyber-girlfriend-019x.onrender.com` 已随旧服务删除）
 - GitHub 仓库：https://github.com/SenuMirai/cyber-lover-video-call （公开，分支 `main`，2026-10-10 启用）
-  - 旧库 `SenuMirai/cyber-lover` 历史里留过一张用户照片，已由用户于 2026-10-10 手动删除。
-    新库用「逐字节复现提交」推的干净历史（blob/tree/commit SHA 与本地完全一致）。
-  - 图片托管仓库 `SenuMirai/cyber-lover-assets` **不动**（只存形象图，无隐私）。
-- Render：服务 ID `srv-db4ekdlg1s2s7396f2cg`，workspace `tea-db4ed360tbcc73e3p6l0`，
-  docker / free / **singapore** / healthCheck `/health` / autoDeploy `commit`
+  - 旧库 `SenuMirai/cyber-girlfriend` 历史里留过一张用户照片（已 `filter-branch` 重写过，但 GitHub 不回收
+    不可达 blob），2026-10-10 改为「另建干净新库」，旧库由用户手动删除。
+    新库用「逐字节复现提交」推的干净历史（blob/tree/commit SHA 与本地完全一致，连 tag 都一致）。
+  - 图片托管仓库 2026-10-10 由 `cyber-girlfriend-assets` **改名为** `SenuMirai/cyber-lover-assets`；
+    GitHub 对改名仓库保留重定向，所以老用户 exe 里写死的旧 raw URL 仍然拿得到图。
+- Render：服务 ID `srv-db536svavr4c73fa0q50`（名称 `cyber-lover`），workspace `tea-db4ed360tbcc73e3p6l0`，
+  docker / free / **singapore** / healthCheck `/health`，仓库指向新库
+  （旧服务 `srv-db4ekdlg1s2s7396f2cg` 已于 2026-10-10 删除，`DELETE /v1/services/{id}` 返 204）
 - 环境变量：`CG_PUBLIC=1`、`CG_DATA_DIR=/data`、`CG_CLIENT_TTL_DAYS=30`
 - 部署方式：**用 `gh` 建仓推送 + Render REST API 全自动建服务**（见 2026-10-09 日志里的可复用命令）。
   **Render 没有出现仓库授权障碍**，`POST /v1/services` 直接 201 —— 以后加服务可全自动，无需手动装 GitHub App。
